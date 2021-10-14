@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{# {% block title %}Log in!{% endblock %} #}
+
+{% block bs %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+{% endblock %}
+
+
+{% block body %}
+
+<body class="body">
+
+    <div class="sign section--bg" data-bg="{{asset('img/section/section.jpg')}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="sign__content">
+                        <!-- authorization form -->
+                        <form method="POST"  class="sign__form">
+
+                            {% if error %}
+                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+
+                            {# {% if app.user %}
+                                <div class="mb-3">
+                                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                </div>
+                            {% endif %} #}
+
+                            <a href="{{path('home')}}" class="sign__logo">
+								<img src="{{asset('img/logos.png')}}" alt="">
+							</a>
+
+                            <div class="sign__group">
+                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail"  autocomplete="email"  class="sign__input" placeholder="Email">
+                            </div>
+
+                            <div class="sign__group">
+                                <input type="password" name="password" id="inputPassword" class="sign__input" placeholder="Password" autocomplete="current-password" required>
+                            </div>
+
+                               <input type="hidden" name="_csrf_token"
+                                value="{{ csrf_token('authenticate') }}"
+                               >
+
+                            <div class="sign__group sign__group--checkbox">
+                                <input id="remember_me" name="_remember_me" type="checkbox" >
+                                <label for="remember_me">Remember Me</label>
+                            </div>
+
+                            <button class="sign__btn" type="submit">Sign in</button>
+
+         
+
+                            <span class="sign__text">Don't have an account? <a href="{{path('app_register')}}">Sign up!</a></span>
+
+                            <span class="sign__text"><a href="{{path('app_forgot_password_request')}}">Forgot password?</a></span>
+                        </form>
+                        <!-- end authorization form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+{% endblock %}

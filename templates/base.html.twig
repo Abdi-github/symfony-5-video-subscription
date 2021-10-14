@@ -1,19 +1,87 @@
-<!DOCTYPE html>
+{# <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Welcome!{% endblock %}</title> #}
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
+        {# {% block stylesheets %} #}
             {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
+        {# {% endblock %} #}
 
-        {% block javascripts %}
+        {# {% block javascripts %} #}
             {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
+        {# {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
     </body>
+</html> #}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{asset('css/bootstrap-reboot.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap-grid.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/jquery.mCustomScrollbar.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/nouislider.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/ionicons.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{asset('css/plyr.css')}}">
+    <link rel="stylesheet" href="{{asset('css/photoswipe.css')}}">
+    <link rel="stylesheet" href="{{asset('css/default-skin.css')}}">
+    <link rel="stylesheet" href="{{asset('css/main.css')}}">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="{{asset('icon/favicon-32x32.png')}}" sizes="32x32">
+    <link rel="apple-touch-icon" href="{{asset('icon/favicon-32x32.png')}}">
+    {% block bs %}{% endblock %}
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Dmitry Volkov">
+    <title>HotFlix – Online Movies, TV Shows & Cinema HTML Template</title>
+</head>
+<body class="body">
+{% block body %}
+    <!-- header -->
+ {% include "common/header.html.twig" %}
+    <!-- end header -->
+
+   {% block content %}{% endblock %}
+
+
+
+    <!-- pricing -->
+  {% include "common/pricing.html.twig" %}
+    <!-- end pricing -->
+
+    <!-- footer -->
+  {% include "common/footer.html.twig" %}
+    <!-- end footer -->
+{% endblock %}
+
+    <!-- JS -->
+    <script src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
+    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('js/owl.carousel.min.js')}}"></script>
+    <script src="{{asset('js/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{asset('js/jquery.mousewheel.min.js')}}"></script>
+    <script src="{{asset('js/jquery.mCustomScrollbar.min.js')}}"></script>
+    <script src="{{asset('js/wNumb.js')}}"></script>
+    <script src="{{asset('js/nouislider.min.js')}}"></script>
+    <script src="{{asset('js/plyr.min.js')}}"></script>
+    <script src="{{asset('js/photoswipe.min.js')}}"></script>
+    <script src="{{asset('js/photoswipe-ui-default.min.js')}}"></script>
+    <script src="{{asset('js/main.js')}}"></script>
+</body>
+
 </html>
+

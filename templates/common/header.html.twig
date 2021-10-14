@@ -1,0 +1,108 @@
+   
+   
+   <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="header__content">
+                        <!-- header logo -->
+                        <a href="{{path('home')}}" class="header__logo">
+							<img src="{{asset('img/logos.png')}}" alt="">
+						</a>
+                        <!-- end header logo -->
+
+                        <!-- header nav -->
+                        <ul class="header__nav">
+                            <!-- dropdown -->
+                            <li class="header__nav-item">
+                                <a href="{{path('home')}}" class="header__nav-link">Home</a>
+                            </li>
+                            <!-- end dropdown -->
+
+                            <!-- dropdown -->
+                            <li class="header__nav-item">
+                                <a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuCatalog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog <i class="icon ion-ios-arrow-down"></i></a>
+
+                                <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
+                                  {# {{render(controller('App\\Controller\\HomeController::getCategories'))}}       #}
+
+                                </ul>
+                            </li>
+                            <!-- end dropdown -->
+
+                            <li class="header__nav-item">
+                                <a href="pricing.html" class="header__nav-link">Pricing plan</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a href="{{path('admin_panel')}}" class="header__nav-link">Admin</a>
+                            </li>
+
+                           
+                        </ul>
+                        <!-- end header nav -->
+
+                        <!-- header auth -->
+                        <div class="header__auth">
+                            <form action="#" class="header__search">
+                                <input name="query" required class="header__search-input" type="text" placeholder="Search...">
+                                <button class="header__search-button" type="submit">
+									<i class="icon ion-ios-search"></i>
+								</button>
+                                <button class="header__search-close" type="button">
+									<i class="icon ion-md-close"></i>
+								</button>
+                            </form>
+
+                            <button class="header__search-btn" type="button">
+								<i class="icon ion-ios-search"></i>
+							</button>
+
+                            <!-- dropdown -->
+                            <div class="dropdown header__lang">
+                                <a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">EN <i class="icon ion-ios-arrow-down"></i></a>
+
+                                <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuLang">
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                </ul>
+                            </div>
+                            <!-- end dropdown -->
+                            
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a href="{{path('app_logout')}}" class="header__sign-in">
+								<i class="icon ion-ios-log-in"></i>
+								<span>sign out</span>
+							    </a>
+                        {% endif %}
+                         
+
+
+                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                        
+                            
+                            <a href="{{path('app_register')}}" class="header__sign-in">
+								<i class="icon ion-ios-log-in"></i>
+								<span class="signin-span">sign up</span>
+							</a>
+                            <a href="{{path('app_login')}}" class="header__sign-in">
+								<i class="icon ion-ios-log-in"></i>
+								<span  class="signin-span">sign in</span>
+							</a>
+
+                        {% endif %}
+                       
+                        </div>
+                        <!-- end header auth -->
+
+                        <!-- header menu btn -->
+                        <button class="header__btn" type="button">
+							<span></span>
+							<span></span>
+							<span></span>
+						</button>
+                        <!-- end header menu btn -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
