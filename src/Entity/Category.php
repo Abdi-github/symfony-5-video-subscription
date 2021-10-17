@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
@@ -29,11 +30,11 @@ class Category
     /**
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="category")
      */
-    private $path;
+    private $videos;
 
     public function __construct()
     {
-        $this->path = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,40 +54,33 @@ class Category
         return $this;
     }
 
-
-
     /**
      * @return Collection|Video[]
      */
-    public function getPath(): Collection
+    public function getVideos(): Collection
     {
-        return $this->path;
+        return $this->videos;
     }
 
-    public function addPath(Video $path): self
+    public function addVideo(Video $video): self
     {
-        if (!$this->path->contains($path)) {
-            $this->path[] = $path;
-            $path->setCategory($this);
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removePath(Video $path): self
+    public function removeVideo(Video $video): self
     {
-        if ($this->path->removeElement($path)) {
+        if ($this->videos->removeElement($video)) {
             // set the owning side to null (unless already changed)
-            if ($path->getCategory() === $this) {
-                $path->setCategory(null);
+            if ($video->getCategory() === $this) {
+                $video->setCategory(null);
             }
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }

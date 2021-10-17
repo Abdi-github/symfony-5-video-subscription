@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping\Index as Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * @ORM\Entity(repositoryClass=VideoRepository::class)
  * @ORM\Table(indexes={@Index(name="search_idx", columns={"name"})})
@@ -26,31 +25,30 @@ class Video
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=90, unique=true)
-     * @Assert\NotBlank(message = "Video title is required")
-
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="videos")
-     * @Assert\NotBlank(message = "Video genre is required")
-     */
-    private $genre;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="path")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="videos")
+     * @Assert\NotBlank(message = "Video title is required")
      */
     private $category;
 
     /**
+     * @ORM\ManyToMany(targetEntity=Genre::class, mappedBy="videos")
+     */
+    private $genres;
+
+    /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message = "Video category is required")
+     * @Assert\NotBlank(message = "Video path is required")
      */
     private $path;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message = "Video duration is required")
      */
     private $duration;
 
@@ -75,11 +73,9 @@ class Video
      */
     private $updated_at;
 
-
-
     public function __construct()
     {
-        $this->genre = new ArrayCollection();
+        $this->genres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,30 +95,6 @@ class Video
         return $this;
     }
 
-    /**
-     * @return Collection|Genre[]
-     */
-    public function getGenre(): Collection
-    {
-        return $this->genre;
-    }
-
-    public function addGenre(Genre $genre): self
-    {
-        if (!$this->genre->contains($genre)) {
-            $this->genre[] = $genre;
-        }
-
-        return $this;
-    }
-
-    public function removeGenre(Genre $genre): self
-    {
-        $this->genre->removeElement($genre);
-
-        return $this;
-    }
-
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -131,6 +103,33 @@ class Video
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Genre[]
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): self
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres[] = $genre;
+            $genre->addVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): self
+    {
+        if ($this->genres->removeElement($genre)) {
+            $genre->removeVideo($this);
+        }
 
         return $this;
     }
@@ -171,7 +170,19 @@ class Video
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getRating(): ?float
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?float $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
@@ -195,26 +206,14 @@ class Video
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getRating(): ?float
-    {
-        return $this->rating;
-    }
-
-    public function setRating(?float $rating): self
-    {
-        $this->rating = $rating;
 
         return $this;
     }

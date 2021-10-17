@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * @ORM\Entity(repositoryClass=GenreRepository::class)
  */
@@ -21,13 +22,13 @@ class Genre
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=45, unique=true)
-     *  @Assert\NotBlank(message = "Category name is required")
+     * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank(message = "Genre name is required")
      */
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Video::class, mappedBy="genre")
+     * @ORM\ManyToMany(targetEntity=Video::class, inversedBy="genres")
      */
     private $videos;
 
@@ -65,7 +66,6 @@ class Genre
     {
         if (!$this->videos->contains($video)) {
             $this->videos[] = $video;
-            $video->addGenre($this);
         }
 
         return $this;
@@ -73,15 +73,8 @@ class Genre
 
     public function removeVideo(Video $video): self
     {
-        if ($this->videos->removeElement($video)) {
-            $video->removeGenre($this);
-        }
+        $this->videos->removeElement($video);
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 }
