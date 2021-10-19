@@ -25,6 +25,7 @@
 
                                 <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
                                   {{render(controller('App\\Controller\\CategoryController::getCategories'))}}      
+                                
 
                                 </ul>
                             </li>
@@ -43,7 +44,7 @@
 
                         <!-- header auth -->
                         <div class="header__auth">
-                            <form action="#" class="header__search">
+                            <form action="{{path('search.result')}}" class="header__search">
                                 <input name="query" required class="header__search-input" type="text" placeholder="Search...">
                                 <button class="header__search-button" type="submit">
 									<i class="icon ion-ios-search"></i>

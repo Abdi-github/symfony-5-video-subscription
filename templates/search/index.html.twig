@@ -7,13 +7,20 @@
                 <div class="col-12">
                     <div class="section__wrap">
                         <!-- section title -->
-                        <h1 class="section__title">{{category_name|upper}}</h1>
+                        
+                         <h1 class="section__title">
+                              {{ videos ? videos|length ~ ' Videos Found'  : videos == null ? 'NO VIDEOS FOUND' }}
+                        </h1>
+                 
+
+                        
+                       
                         <!-- end section title -->
 
                         <!-- breadcrumb -->
                         <ul class="breadcrumb">
                             <li class="breadcrumb__item"><a href="{{path('home')}}">Home</a></li>
-                            <li class="breadcrumb__item breadcrumb__item--active">Catalog</li>
+                            <li class="breadcrumb__item breadcrumb__item--active">Search Result</li>
                         </ul>
                         <!-- end breadcrumb -->
                     </div>
@@ -24,7 +31,7 @@
     <!-- end page title -->
 
     <!-- filter -->
-    <div class="filter">
+    {# <div class="filter">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -83,14 +90,14 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> #}
     <!-- end filter -->
 
     <!-- catalog -->
     <div class="catalog">
         <div class="container">
             <div class="row row--grid">
-            {% for video in videosByCategoryLimited %}
+            {% for video in videos %}
                 
                 <!-- card -->
                 <div class="col-6 col-sm-4 col-md-3 col-xl-2">
@@ -113,7 +120,7 @@
 
                
             </div>
-
+{# 
             <div class="row">
                 <!-- paginator -->
                 <div class="col-12">
@@ -139,7 +146,7 @@
                 <!-- end paginator -->
 
         
-            </div>
+            </div> #}
         </div>
     </div>
     <!-- end catalog -->
@@ -148,3 +155,4 @@
 
   
 {% endblock %}
+
