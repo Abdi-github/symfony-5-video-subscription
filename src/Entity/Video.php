@@ -73,9 +73,36 @@ class Video
      */
     private $updated_at;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $release_year;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $director;
+
+    /**
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    private $cast = [];
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $country;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="video", orphanRemoval=true)
+     *  @ORM\OrderBy({"created_at" = "DESC"})
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,6 +241,84 @@ class Video
     public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getReleaseYear(): ?int
+    {
+        return $this->release_year;
+    }
+
+    public function setReleaseYear(?int $release_year): self
+    {
+        $this->release_year = $release_year;
+
+        return $this;
+    }
+
+    public function getDirector(): ?string
+    {
+        return $this->director;
+    }
+
+    public function setDirector(?string $director): self
+    {
+        $this->director = $director;
+
+        return $this;
+    }
+
+    public function getCast(): ?array
+    {
+        return $this->cast;
+    }
+
+    public function setCast(?array $cast): self
+    {
+        $this->cast = $cast;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getVideo() === $this) {
+                $comment->setVideo(null);
+            }
+        }
 
         return $this;
     }

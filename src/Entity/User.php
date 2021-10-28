@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -61,6 +63,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Comment::class, inversedBy="usersLikeComments")
+     * @ORM\JoinTable(name="user_likedComments")
+     */
+    private $liked_comments;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Comment::class, inversedBy="usersDislikeComments")
+     * @ORM\JoinTable(name="user_dislikedComments")
+     */
+    private $disliked_comments;
+
+    public function __construct()
+    {
+        $this->liked_comments = new ArrayCollection();
+        $this->disliked_comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -195,6 +215,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getLikedComments(): Collection
+    {
+        return $this->liked_comments;
+    }
+
+    public function addLikedComment(Comment $likedComment): self
+    {
+        if (!$this->liked_comments->contains($likedComment)) {
+            $this->liked_comments[] = $likedComment;
+        }
+
+        return $this;
+    }
+
+    public function removeLikedComment(Comment $likedComment): self
+    {
+        $this->liked_comments->removeElement($likedComment);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getDislikedComments(): Collection
+    {
+        return $this->disliked_comments;
+    }
+
+    public function addDislikedComment(Comment $dislikedComment): self
+    {
+        if (!$this->disliked_comments->contains($dislikedComment)) {
+            $this->disliked_comments[] = $dislikedComment;
+        }
+
+        return $this;
+    }
+
+    public function removeDislikedComment(Comment $dislikedComment): self
+    {
+        $this->disliked_comments->removeElement($dislikedComment);
 
         return $this;
     }

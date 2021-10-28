@@ -26,6 +26,9 @@ class GenreFixtures extends Fixture
             ['Action'],
             ['Comedy'],
             ['Drama'],
+            ['crime'],
+            ['Nature'],
+            ['Science']
 
         ];
     }

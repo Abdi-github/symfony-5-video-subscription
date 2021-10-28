@@ -3305,13 +3305,27 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 
 .comments__rate button:last-child i {
     margin-left: 6px;
+    margin-right: 6px;
     color: #eb5757;
 }
 
-.comments__rate button:first-child i {
+.comments__rate button:first-child i  {
     margin-right: 6px;
     color: #29b474;
 }
+
+.comments__rate button:last-child .inActive  {
+    margin-left: 6px;
+     color: #b7b8bb;
+}
+
+.comments__rate button:first-child .inActive   {
+    margin-right: 6px;
+    color: #b7b8bb;
+}
+
+
+
 
 .comments__rate button:first-child:before {
     content: '';

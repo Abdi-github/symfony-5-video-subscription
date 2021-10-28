@@ -154,6 +154,39 @@ class VideoRepository extends ServiceEntityRepository
         return $querybuilder->getQuery()->getSingleScalarResult();
     }
 
+    // public function getVideoDetails($id)
+    // {
+    //     return $this->createQueryBuilder('v')
+    //         ->leftJoin('v.comments', 'c')
+    //         ->leftJoin('c.user', 'u')
+    //         ->addSelect('c', 'u')
+    //         ->where('v.id = :id')
+    //         ->setParameter('id', $id)
+    //         ->getQuery()
+    //         ->getOneOrNullResult();
+    // }
+
+    public function getVideoDetails($video_id)
+    {
+        $qb = $this->createQueryBuilder('v');
+        $qb
+            ->addSelect('c', 'u')
+            ->innerJoin('v.comments', 'c')
+            ->innerJoin('c.user', 'u')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('v.id', $video_id)
+                )
+            );
+
+
+        // \dd($qb->getQuery()->getOneOrNullResult());
+
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
     private function prepareQuery(string $query): array
     {
         return explode(' ', $query);

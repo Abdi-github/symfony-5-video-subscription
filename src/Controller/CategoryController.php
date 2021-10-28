@@ -50,7 +50,7 @@ class CategoryController extends AbstractController
 
 
 
-        $limit = 3;
+        $limit = 6;
 
         $sortByTitle = $request->query->get('title');
         $sortByRating = $request->query->get('rating');
