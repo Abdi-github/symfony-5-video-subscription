@@ -76,6 +76,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $disliked_comments;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Subscription::class, inversedBy="user", cascade={"persist", "remove"})
+     */
+    private $subscription;
+
     public function __construct()
     {
         $this->liked_comments = new ArrayCollection();
@@ -263,6 +268,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeDislikedComment(Comment $dislikedComment): self
     {
         $this->disliked_comments->removeElement($dislikedComment);
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): self
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }
