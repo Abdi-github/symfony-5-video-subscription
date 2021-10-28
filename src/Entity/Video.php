@@ -274,6 +274,8 @@ class Video
         return $this->cast;
     }
 
+
+
     public function setCast(?array $cast): self
     {
         $this->cast = $cast;
