@@ -65,6 +65,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")  
+     */
+    private $comments;
+
+    /**
      * @ORM\ManyToMany(targetEntity=Comment::class, inversedBy="usersLikeComments")
      * @ORM\JoinTable(name="user_likedComments")
      */
@@ -230,6 +235,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getLikedComments(): Collection
     {
         return $this->liked_comments;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
     }
 
     public function addLikedComment(Comment $likedComment): self

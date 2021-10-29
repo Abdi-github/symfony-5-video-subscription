@@ -1,0 +1,212 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+
+<!-- page title -->
+    <section class="section section--first section--bg" data-bg="{{asset('img/section/section.jpg')}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section__wrap">
+                        <!-- section title -->
+                        <h2 class="section__title">Swift</h2>
+                        <!-- end section title -->
+
+                        <!-- breadcrumb -->
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb__item"><a href="{{path('home')}}">Home</a></li>
+                            <li class="breadcrumb__item breadcrumb__item--active">Profile</li>
+                        </ul>
+                        <!-- end breadcrumb -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end page title -->
+
+    <!-- content -->
+    <div class="content content--profile">
+        <!-- profile -->
+        <div class="profile">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="profile__content">
+                            <div class="profile__user">
+                               
+                                <div class="profile__meta">
+                                    <h3>{{user.firstName}} {{user.lastName}}</h3>
+                                    <span>{{user.email}}</span>
+                                </div>
+                            </div>
+
+                            <!-- content tabs nav -->
+                            <ul class="nav nav-tabs content__tabs content__tabs--profile" id="content__tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Profile</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Subscription</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Settings</a>
+                                </li>
+                            </ul>
+                            <!-- end content tabs nav -->
+
+                            <!-- content mobile tabs nav -->
+                            <div class="content__mobile-tabs content__mobile-tabs--profile" id="content__mobile-tabs">
+                                <div class="content__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <input type="button" value="Profile">
+                                    <span></span>
+                                </div>
+
+                                <div class="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Profile</a></li>
+
+                                        <li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Subscription</a></li>
+
+                                        <li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Settings</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- end content mobile tabs nav -->
+
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end profile -->
+
+   
+
+        <div class="container">
+            <!-- content tabs -->
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
+                    <div class="row row--grid">
+                        <!-- stats -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                        {% if user.subscription %}
+                        
+                            <div class="stats">
+                                <span>{{user.subscription.plan}} plan</span>
+                                <p> {{user.subscription.price == 0 ? 'Free' : 'CHF ' ~ user.subscription.price ~ ' / month' }} </p>
+                                <i class="icon ion-ios-card"></i>
+                            </div>
+
+                        {% endif %}    
+                        </div>
+                        <!-- end stats -->
+
+                    
+
+                        <!-- stats -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="stats">
+                                <span>Your comments</span>
+
+                                
+                                
+                                <p><a href="#">
+                                {{user.comments.count() > 0 ? user.comments.count() : 'No Comment' }}
+                                </a></p>
+                                <i class="icon ion-ios-chatbubbles"></i>
+                            </div>
+                        </div>
+                        <!-- end stats -->
+
+                   
+
+               
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
+                    <div class="row row--grid">
+                     
+                        {% if user.subscription.plan == 'Basic' %}
+                        {% include "common/subscriptions/free.html.twig" %}                   
+                        {% endif %}
+
+                        {% if user.subscription.plan == 'Premium' %}
+                        {% include "common/subscriptions/premium.html.twig" %}                   
+                        {% endif %}
+
+                        {% if user.subscription.plan == 'Cinematic' %}
+                        {% include "common/subscriptions/cinematic.html.twig" %}                   
+                        {% endif %}
+
+                    </div>
+                </div>
+
+              {# <pre>
+                  {{ dump(app.getToken().getUser().getId()) }}
+              </pre> #}
+
+                <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
+                    <div class="row">
+                        <!-- details form -->
+                        <div class="col-12 col-lg-6">
+                            <form method="POST" action="{{path('user_profile_update', {'user': user.id})}}" class="form form--profile">
+                                <div class="row row--form">
+                                    <div class="col-12">
+                                        <h4 class="form__title">Profile details</h4>
+                                    </div>
+
+                                   <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="form__group">
+                                            <label class="form__label" for="firstname">First Name</label>
+                                            <input id="firstname" required type="text" name="firstname" class="form__input" value="{{user.firstName}}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="form__group">
+                                            <label class="form__label" for="lastname">Last Name</label>
+                                            <input id="lastname" required type="text" name="lastname" class="form__input" value="{{user.lastName}}">
+                                        </div>
+                                    </div>
+
+                                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="form__group">
+                                            <label class="form__label" for="email">Email</label>
+                                            <input id="email" required type="text" name="email" class="form__input" value="{{user.email}}">
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="token" value="{{ csrf_token('change-user-detail') }}"/>
+
+
+                                    <div class="col-12">
+                                        <button  class="form__btn" type="submit">Save</button>
+                                    </div>
+                                </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt-5">
+                            <h3><a style="color: #f9ab00"  href="{{path('app_reset_password', {'token': app.getToken().getUser().getId()})}}">You Want to Change your password? Click</a></h3>
+                        </div>
+
+                       
+                        <!-- end details form -->
+
+                    
+                        
+                        <!-- end password form -->
+                    </div>
+                </div>
+            </div>
+            <!-- end content tabs -->
+        </div>
+    </div>
+    <!-- end content -->
+
+{% endblock %}
