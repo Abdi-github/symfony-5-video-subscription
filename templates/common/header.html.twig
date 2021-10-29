@@ -32,7 +32,7 @@
                             <!-- end dropdown -->
 
                             <li class="header__nav-item">
-                                <a href="pricing.html" class="header__nav-link">Pricing plan</a>
+                                <a href="{{path('pricing')}}" class="header__nav-link">Pricing plan</a>
                             </li>
                             {% if is_granted('ROLE_ADMIN') %}
                             <li class="header__nav-item">

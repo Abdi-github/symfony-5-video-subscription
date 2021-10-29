@@ -35,7 +35,8 @@ class VideoDetailController extends AbstractController
 
 
         return $this->render('video_detail/index.html.twig', [
-            'video' => $video
+            'video' => $video,
+
         ]);
     }
 
