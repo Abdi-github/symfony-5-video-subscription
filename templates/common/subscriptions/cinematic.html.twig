@@ -7,7 +7,8 @@
                         <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Lifetime Availability</span></div>
                         <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Any Device</span></div>
                         <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 24/7 Support</span></div>
-                        {# <a href="#" class="price__btn">Choose Plan</a> #}
+                        <a href="#" class="price__btn">Change Plan</a>
+                        <a href="{{path('cancel_plan', {'user': user.id, 'plan': 'user.subscription.id'})}}" class="price__btn">Cancel Plan</a>
                     </div>
                 </div>
                 <!-- end price -->

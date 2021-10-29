@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\SubscriptionRepository;
 use App\Security\EmailVerifier;
+use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +27,7 @@ class UserProfileController extends AbstractController
     public function index(User $user): Response
     {
 
-        // \dd($user->getSubscription()->getPlan());
+        // \dd($user->getSubscription());
         return $this->render('user_profile/index.html.twig', [
             'user' => $user
         ]);
@@ -75,6 +77,25 @@ class UserProfileController extends AbstractController
             }
         }
 
+
+        return $this->redirectToRoute('user_profile', ['user' => $user->getId()]);
+    }
+
+
+
+    #[Route('/user/plan/cancel/{user}/{plan}', name: 'cancel_plan')]
+    public function cancelPlan(User $user)
+    {
+        // \dd($user);
+        $subscription = $user->getSubscription();
+        $subscription->setValidUntil(new DateTime());
+        $subscription->setPaymentStatus(null);
+        $subscription->setPlan('canceled');
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($subscription);
+        $em->flush();
 
         return $this->redirectToRoute('user_profile', ['user' => $user->getId()]);
     }
