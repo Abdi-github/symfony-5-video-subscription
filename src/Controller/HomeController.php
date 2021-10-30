@@ -18,6 +18,8 @@ class HomeController extends AbstractController
 
         $newVideos = $vr->newVideosByLimit(8);
 
+
+
         // \dd($newVideos);
 
         return $this->render('home/index.html.twig', [
