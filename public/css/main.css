@@ -2584,7 +2584,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     border: none;
 }
 
-.price__btn {
+ .price__btn  {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -2600,7 +2600,30 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     margin-top: 20px;
 }
 
+
+ .prices__btn {
+        display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 46px;
+    width: 100%;
+    border-radius: 6px;
+    background-color: transparent;
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    border: 2px solid #f9ab00;
+    margin-top: 20px;
+}
+
+
+
 .price__btn:hover {
+    color: #fff;
+    background-color: rgba(249, 171, 0, 0.05);
+}
+.prices__btn:hover {
     color: #fff;
     background-color: rgba(249, 171, 0, 0.05);
 }
@@ -2616,6 +2639,9 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
         padding: 30px;
     }
     .price__btn {
+        margin-top: 30px;
+    }
+    .prices__btn {
         margin-top: 30px;
     }
 }

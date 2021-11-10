@@ -18,24 +18,11 @@ class Subscription
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $plan;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $valid_until;
 
-    /**
-     * @ORM\Column(type="string", length=45, nullable=true)
-     */
-    private $payment_status;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $free_plan_used;
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, mappedBy="subscription", cascade={"persist", "remove"})
@@ -46,6 +33,31 @@ class Subscription
      * @ORM\Column(type="float")
      */
     private $price;
+
+    /**
+     * @ORM\Column(type="string", length=45)
+     */
+    private $valid_until;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $resolution;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $availability;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $device;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $support;
 
     public function getId(): ?int
     {
@@ -64,41 +76,7 @@ class Subscription
         return $this;
     }
 
-    public function getValidUntil(): ?\DateTimeInterface
-    {
-        return $this->valid_until;
-    }
 
-    public function setValidUntil(\DateTimeInterface $valid_until): self
-    {
-        $this->valid_until = $valid_until;
-
-        return $this;
-    }
-
-    public function getPaymentStatus(): ?string
-    {
-        return $this->payment_status;
-    }
-
-    public function setPaymentStatus(?string $payment_status): self
-    {
-        $this->payment_status = $payment_status;
-
-        return $this;
-    }
-
-    public function getFreePlanUsed(): ?bool
-    {
-        return $this->free_plan_used;
-    }
-
-    public function setFreePlanUsed(bool $free_plan_used): self
-    {
-        $this->free_plan_used = $free_plan_used;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -130,6 +108,66 @@ class Subscription
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getValidUntil(): ?string
+    {
+        return $this->valid_until;
+    }
+
+    public function setValidUntil(string $valid_until): self
+    {
+        $this->valid_until = $valid_until;
+
+        return $this;
+    }
+
+    public function getResolution(): ?string
+    {
+        return $this->resolution;
+    }
+
+    public function setResolution(?string $resolution): self
+    {
+        $this->resolution = $resolution;
+
+        return $this;
+    }
+
+    public function getAvailability(): ?string
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(?string $availability): self
+    {
+        $this->availability = $availability;
+
+        return $this;
+    }
+
+    public function getDevice(): ?string
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?string $device): self
+    {
+        $this->device = $device;
+
+        return $this;
+    }
+
+    public function getSupport(): ?string
+    {
+        return $this->support;
+    }
+
+    public function setSupport(?string $support): self
+    {
+        $this->support = $support;
 
         return $this;
     }

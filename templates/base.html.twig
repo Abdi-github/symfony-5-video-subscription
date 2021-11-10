@@ -60,7 +60,8 @@
 
 
     <!-- pricing -->
-  {% include "common/pricing.html.twig" %}
+  {{render(controller('App\\Controller\\SubscriptionController::getPricingDetail'))}} 
+  {# {% include "common/pricing.html.twig" %} #}
     <!-- end pricing -->
 
     <!-- footer -->

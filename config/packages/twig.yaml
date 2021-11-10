@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    globals:
+        premium_price_id: '%env(PRICE_ID_PREMIUM)%'
+        cinematic_price_id: '%env(PRICE_ID_CINEMATIC)%'
 
 when@test:
     twig:

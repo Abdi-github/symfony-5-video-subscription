@@ -1,3 +1,5 @@
+
+
 <section id="pricing-plan" class="section section--border">
         <div class="container">
             <div class="row">
@@ -13,22 +15,66 @@
             </div>
 
             <div class="row row--grid">
-                <!-- price -->
+          
+            {% for s in subscriptions %}
+
+  
+                  {# <pre>
+                      {{ dump(premium_price_id) }}
+                  </pre> #}
+
+                  {% if s.plan == 'premium' %}
+                  {% set priceId = premium_price_id %}
+                  {% endif %}
+                  {% if s.plan == 'cinematic' %}
+                  {% set priceId = cinematic_price_id %}
+                  {% endif %}
+                  {% if s.plan == 'basic' %}
+                  {% set priceId = null %}
+                  {% endif %}
+
+                 
+                  
+                  
+ 
+
+           
                 <div class="col-12 col-md-6 col-lg-4 order-md-2 order-lg-1">
-                    <div class="price">
-                        <div class="price__item price__item--first"><span>Basic</span> <span>Free</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 7 days</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 720p Resolution</span></div>
-                        <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> Limited Availability</span></div>
-                        <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> Desktop Only</span></div>
-                        <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> Limited Support</span></div>
-                        <a href="#" class="price__btn">Choose Plan</a>
-                    </div>
+                    {# <form  method="POST" action=" {{path('checkout', {'user': app.user.id, 'plan': s.id})}}"> #}
+                    <form  method="POST" action="{{app.user ? path('checkout', {'user': app.user.id, 'plan': s.id}) : path('app_login') }} ">
+                    
+                        <div class="price">
+                            <div class="price__item">
+                             <span>{{s.plan}}</span>
+                             <span>{{s.plan == 'basic' ? 'Free' : 'CHF ' ~ s.price }}</span>
+                            </div>
+                            <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> {{s.validUntil}}</span></div>
+                            <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> {{s.resolution}} Resolution</span></div>
+                            <div class="price__item {{s.availability == 'limited' ? 'price__item--none' : ''}}"><span><i class="{{s.availability == 'limited' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.availability}} Availability</span></div>
+                            <div class="price__item {{s.device == 'Any Device'  ? '' : 'price__item--none'}} "><span><i class="{{s.device == 'Any Device' ? 'icon ion-ios-checkmark' : 'icon ion-ios-close'}}"></i> {{s.device}}</span></div>
+                            <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.support|capitalize}}</span></div>
+                           {% if app.user %}
+                            <input type="hidden" name="priceId" value="{{priceId}}" />
+                            <input type="hidden" name="token" value="{{ csrf_token('checkout') }}"/>
+                            <button  class="prices__btn" type="submit">Choose Plan</button>
+                           {% endif %}
+                           
+                           {% if not app.user %}
+                           <a href="{{path('app_login')}}" class="price__btn">Choose Plan</a>
+                           {% endif %}
+                            </form> 
+                        
+                        </div>
+                    </form>
                 </div>
                 <!-- end price -->
+                
+            {% endfor %}
+                <!-- price -->
+      
 
                 <!-- price -->
-                <div class="col-12 col-md-12 col-lg-4 order-md-1 order-lg-2">
+                {# <div class="col-12 col-md-12 col-lg-4 order-md-1 order-lg-2">
                     <div class="price price--premium">
                         <div class="price__item price__item--first"><span>Premium</span> <span>$34.99 <sub>/ month</sub></span></div>
                         <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 1 Month</span></div>
@@ -38,11 +84,11 @@
                         <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> 24/7 Support</span></div>
                         <a href="#" class="price__btn">Choose Plan</a>
                     </div>
-                </div>
+                </div> #}
                 <!-- end price -->
 
                 <!-- price -->
-                <div class="col-12 col-md-6 col-lg-4 order-md-3">
+                {# <div class="col-12 col-md-6 col-lg-4 order-md-3">
                     <div class="price">
                         <div class="price__item price__item--first"><span>Cinematic</span> <span>$49.99 <sub>/ month</sub></span></div>
                         <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 2 Months</span></div>
@@ -52,7 +98,7 @@
                         <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 24/7 Support</span></div>
                         <a href="#" class="price__btn">Choose Plan</a>
                     </div>
-                </div>
+                </div> #}
                 <!-- end price -->
             </div>
         </div>

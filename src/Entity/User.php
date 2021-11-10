@@ -86,6 +86,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $subscription;
 
+
+
+    /**
+     * @ORM\Column(type="boolean", options={"default":"0"})
+     */
+    private $free_plan_used;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default":"0"})
+     */
+    private $payment_status;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $subscription_valid_until;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $stripe_session_id;
+
     public function __construct()
     {
         $this->liked_comments = new ArrayCollection();
@@ -293,6 +315,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSubscription(?Subscription $subscription): self
     {
         $this->subscription = $subscription;
+
+        return $this;
+    }
+
+
+
+
+    public function getFreePlanUsed(): ?bool
+    {
+        return $this->free_plan_used;
+    }
+
+    public function setFreePlanUsed(bool $free_plan_used): self
+    {
+        $this->free_plan_used = $free_plan_used;
+
+        return $this;
+    }
+
+    public function getPaymentStatus(): ?bool
+    {
+        return $this->payment_status;
+    }
+
+    public function setPaymentStatus(bool $payment_status): self
+    {
+        $this->payment_status = $payment_status;
+
+        return $this;
+    }
+
+    public function getSubscriptionValidUntil(): ?\DateTimeInterface
+    {
+        return $this->subscription_valid_until;
+    }
+
+    public function setSubscriptionValidUntil(?\DateTimeInterface $subscription_valid_until): self
+    {
+        $this->subscription_valid_until = $subscription_valid_until;
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripe_session_id;
+    }
+
+    public function setStripeSessionId(?string $stripe_session_id): self
+    {
+        $this->stripe_session_id = $stripe_session_id;
 
         return $this;
     }

@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Subscription;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,17 +15,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
     private $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier, TokenStorageInterface $tokenStorage)
+
+
+    public function __construct(EmailVerifier $emailVerifier)
     {
         $this->emailVerifier = $emailVerifier;
-        $this->tokenStorage = $tokenStorage;
     }
 
 
@@ -48,9 +50,11 @@ class RegistrationController extends AbstractController
             // \dd($input);
 
 
+
             $user->setFirstName($input['first_name']);
             $user->setLastName($input['last_name']);
             $user->setRoles(['ROLE_USER']);
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasherInterface->hashPassword(
@@ -58,6 +62,8 @@ class RegistrationController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
