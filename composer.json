@@ -3,6 +3,10 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "engines": {
+    "node": "v13.15.*",
+    "npm": "7.14.*"
+},
     "require": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
