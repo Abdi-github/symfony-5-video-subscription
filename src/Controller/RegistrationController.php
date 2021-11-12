@@ -54,6 +54,8 @@ class RegistrationController extends AbstractController
             $user->setFirstName($input['first_name']);
             $user->setLastName($input['last_name']);
             $user->setRoles(['ROLE_USER']);
+            $user->setFreePlanUsed(false);
+            $user->setPaymentStatus(false);
 
             // encode the plain password
             $user->setPassword(
