@@ -18,5 +18,4 @@
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
-/tests
 ###< phpunit/phpunit ###
