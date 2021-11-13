@@ -133,26 +133,26 @@
                 <div class="tab-pane fade" id="subscription" role="tabpanel" aria-labelledby="subscription">
                     <div class="row row--grid">
                      
-                        {% if user.subscription.plan == null %}
-                        <div>You have not subscribed to any plan. Please subscribe now</div>
+                        {% if user.subscription.plan %}
+
+                            {% if user.subscription.plan == 'Basic' %}
+                            {% include "common/subscriptions/free.html.twig" %}                   
+                            {% endif %}
+
+                            {% if user.subscription.plan == 'Premium' %}
+                            {% include "common/subscriptions/premium.html.twig" %}                   
+                            {% endif %}
+
+                            {% if user.subscription.plan == 'Cinematic' %}
+                            {% include "common/subscriptions/cinematic.html.twig" %}                   
+                            {% endif %}
+
+                            {% if user.subscription.plan == 'canceled' %}
+                                <h3 class="mt-4"><a style="color: #f9ab00"  href="{{path('pricing')}}">You are not subscribed to any plan. Subscribe to our best offers.</a></h3>
+
+                            {% endif %}
                         {% endif %}
 
-                        {% if user.subscription.plan == 'Basic' %}
-                        {% include "common/subscriptions/free.html.twig" %}                   
-                        {% endif %}
-
-                        {% if user.subscription.plan == 'Premium' %}
-                        {% include "common/subscriptions/premium.html.twig" %}                   
-                        {% endif %}
-
-                        {% if user.subscription.plan == 'Cinematic' %}
-                        {% include "common/subscriptions/cinematic.html.twig" %}                   
-                        {% endif %}
-
-                        {% if user.subscription.plan == 'canceled' %}
-                            <h3 class="mt-4"><a style="color: #f9ab00"  href="{{path('pricing')}}">You are not subscribed to any plan. Subscribe to our best offers.</a></h3>
-
-                        {% endif %}
                         
 
                     </div>
