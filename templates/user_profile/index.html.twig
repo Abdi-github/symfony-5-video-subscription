@@ -133,7 +133,7 @@
                 <div class="tab-pane fade" id="subscription" role="tabpanel" aria-labelledby="subscription">
                     <div class="row row--grid">
                      
-                        {% if user.subscription.plan %}
+                        {% if user.subscription %}
 
                             {% if user.subscription.plan == 'Basic' %}
                             {% include "common/subscriptions/free.html.twig" %}                   
