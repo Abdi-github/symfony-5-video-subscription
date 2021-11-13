@@ -148,10 +148,15 @@
                             {% endif %}
 
                             {% if user.subscription.plan == 'canceled' %}
-                                <h3 class="mt-4"><a style="color: #f9ab00"  href="{{path('pricing')}}">You are not subscribed to any plan. Subscribe to our best offers.</a></h3>
+                                <h3 class="mt-4"><a style="color: #f9ab00"  href="{{path('pricing')}}">Your subscription has been canceled. Subscribe again to our best offers.</a></h3>
 
                             {% endif %}
                         {% endif %}
+
+                        {% if not user.subscription %}
+                                <h3 class="mt-4"><a style="color: #f9ab00"  href="{{path('pricing')}}">You are not subscribed to any plan. Subscribe to our best offers.</a></h3>
+                        {% endif %}
+                        
 
                         
 
