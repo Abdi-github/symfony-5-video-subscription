@@ -109,18 +109,6 @@
     "gedmo/doctrine-extensions": {
         "version": "v3.1.0"
     },
-    "guzzlehttp/guzzle": {
-        "version": "7.4.0"
-    },
-    "guzzlehttp/promises": {
-        "version": "1.5.1"
-    },
-    "guzzlehttp/psr7": {
-        "version": "2.1.0"
-    },
-    "hamcrest/hamcrest-php": {
-        "version": "v2.0.1"
-    },
     "knplabs/knp-components": {
         "version": "v3.1.0"
     },
@@ -129,12 +117,6 @@
     },
     "laminas/laminas-code": {
         "version": "4.4.3"
-    },
-    "mailjet/mailjet-apiv3-php": {
-        "version": "v1.5.5"
-    },
-    "mockery/mockery": {
-        "version": "1.4.4"
     },
     "monolog/monolog": {
         "version": "2.3.5"
@@ -201,23 +183,11 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
-    "psr/http-client": {
-        "version": "1.0.1"
-    },
-    "psr/http-factory": {
-        "version": "1.0.1"
-    },
-    "psr/http-message": {
-        "version": "1.0.1"
-    },
     "psr/link": {
         "version": "1.1.1"
     },
     "psr/log": {
         "version": "2.0.0"
-    },
-    "ralouphie/getallheaders": {
-        "version": "3.0.3"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"
@@ -442,15 +412,6 @@
             "./config/packages/mailer.yaml"
         ]
     },
-    "symfony/mailjet-mailer": {
-        "version": "5.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.2",
-            "ref": "037c3256baa3334fd4cc3092a63209ae523696ff"
-        }
-    },
     "symfony/maker-bundle": {
         "version": "1.34",
         "recipe": {
@@ -590,13 +551,13 @@
     "symfony/security-http": {
         "version": "v5.3.8"
     },
-    "symfony/sendgrid-mailer": {
+    "symfony/sendinblue-mailer": {
         "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.4",
-            "ref": "b46e4f8f1adb2864f0aa9c0ff57aea3324a07199"
+            "version": "5.2",
+            "ref": "ae1cf494ce06b9a4578a8445c610402a1676ee8d"
         }
     },
     "symfony/serializer": {
