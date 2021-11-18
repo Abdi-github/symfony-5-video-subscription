@@ -49,7 +49,7 @@ class SubscriptionController extends AbstractController
 
 
 
-        \dd($request);
+        // \dd($request);
 
         $priceId = $request->request->get('priceId');
         if ($priceId) {
