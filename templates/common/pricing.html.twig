@@ -29,9 +29,7 @@
                   {% if s.plan == 'cinematic' %}
                   {% set priceId = cinematic_price_id %}
                   {% endif %}
-                  {% if s.plan == 'basic' %}
-                  {% set priceId = null %}
-                  {% endif %}
+  
 
                  
                   
@@ -53,10 +51,10 @@
                             <div class="price__item {{s.availability == 'limited' ? 'price__item--none' : ''}}"><span><i class="{{s.availability == 'limited' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.availability}} Availability</span></div>
                             <div class="price__item {{s.device == 'Any Device'  ? '' : 'price__item--none'}} "><span><i class="{{s.device == 'Any Device' ? 'icon ion-ios-checkmark' : 'icon ion-ios-close'}}"></i> {{s.device}}</span></div>
                             <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.support|capitalize}}</span></div>
-                            <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i>   {{priceId}}</span></div>
+                            <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i>   {{s.plan == 'basic' ? null : priceId }}</span></div>
                         
                            {% if app.user %}
-                            <input type="hidden" name="priceId" value="{{priceId}}" />
+                            <input type="hidden" name="priceId" value="{{s.plan == 'basic' ? null : priceId }}" />
                             <input type="hidden" name="token" value="{{ csrf_token('checkout') }}"/>
                             <button  class="prices__btn" type="submit">Choose Plan</button>
                            {% endif %}
