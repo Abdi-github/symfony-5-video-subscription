@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Subscription;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
-use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,22 +19,16 @@ class RegistrationController extends AbstractController
 {
     private $emailVerifier;
 
-
-
     public function __construct(EmailVerifier $emailVerifier)
     {
         $this->emailVerifier = $emailVerifier;
     }
 
-
-
     #[Route('/confirm', name: 'app_confirm')]
-
     public function confirmPageRedirect(): Response
     {
         return $this->render('common/confirm_redirect.html.twig');
     }
-
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
@@ -46,17 +38,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $input = $request->request->get('registration_form');
-            // \dd($input);
-
-
-
-            $user->setFirstName($input['first_name']);
-            $user->setLastName($input['last_name']);
-            $user->setRoles(['ROLE_USER']);
-            $user->setFreePlanUsed(false);
-            $user->setPaymentStatus(false);
-
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasherInterface->hashPassword(
@@ -65,6 +46,11 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setFirstName($form->get('first_name')->getData());
+            $user->setLastName($form->get('last_name')->getData());
+            $user->setRoles(['ROLE_USER']);
+            $user->setFreePlanUsed(false);
+            $user->setPaymentStatus(false);
 
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -76,12 +62,10 @@ class RegistrationController extends AbstractController
                 'app_verify_email',
                 $user,
                 (new TemplatedEmail())
-                    ->from(new Address('swiftapps@protonmail.com', 'swift'))
-                    // ->from(new Address('swif@gmail.com', 'Swift'))
+                    ->from(new Address('swift-app@gmx.ch', 'Swift'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
-
             );
             // do anything else you need here, like send an email
 
