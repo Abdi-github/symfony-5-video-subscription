@@ -55,7 +55,6 @@
                             <div class="price__item {{s.availability == 'limited' ? 'price__item--none' : ''}}"><span><i class="{{s.availability == 'limited' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.availability}} Availability</span></div>
                             <div class="price__item {{s.device == 'Any Device'  ? '' : 'price__item--none'}} "><span><i class="{{s.device == 'Any Device' ? 'icon ion-ios-checkmark' : 'icon ion-ios-close'}}"></i> {{s.device}}</span></div>
                             <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.support|capitalize}}</span></div>
-                            <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i>   {{priceId}}</span></div>
                         
                            {% if app.user %}
                             <input type="hidden" name="priceId" value="{{priceId}}" />
@@ -74,36 +73,7 @@
                 <!-- end price -->
                 
             {% endfor %}
-                <!-- price -->
-      
-
-                <!-- price -->
-                {# <div class="col-12 col-md-12 col-lg-4 order-md-1 order-lg-2">
-                    <div class="price price--premium">
-                        <div class="price__item price__item--first"><span>Premium</span> <span>$34.99 <sub>/ month</sub></span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 1 Month</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Full HD</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Lifetime Availability</span></div>
-                        <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> TV & Desktop</span></div>
-                        <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> 24/7 Support</span></div>
-                        <a href="#" class="price__btn">Choose Plan</a>
-                    </div>
-                </div> #}
-                <!-- end price -->
-
-                <!-- price -->
-                {# <div class="col-12 col-md-6 col-lg-4 order-md-3">
-                    <div class="price">
-                        <div class="price__item price__item--first"><span>Cinematic</span> <span>$49.99 <sub>/ month</sub></span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 2 Months</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Ultra HD</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Lifetime Availability</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> Any Device</span></div>
-                        <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> 24/7 Support</span></div>
-                        <a href="#" class="price__btn">Choose Plan</a>
-                    </div>
-                </div> #}
-                <!-- end price -->
+             
             </div>
         </div>
     </section>
