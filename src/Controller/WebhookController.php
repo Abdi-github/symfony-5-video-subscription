@@ -27,57 +27,57 @@ class WebhookController extends AbstractController
 
         $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
 
-        $payload = @file_get_contents('php://input');
 
-        $header = 'Stripe-Signature';
-        $signature = $request->headers->get($header);
 
-        $sig_header = $signature;
-        $event = null;
 
-        try {
-            $event = \Stripe\Webhook::constructEvent(
-                $payload,
-                $sig_header,
-                $endpoint_secret
-            );
-            echo $event->data;
-        } catch (\UnexpectedValueException $e) {
-            // Invalid payload
-            echo $e->getMessage();
-            http_response_code(400);
-            exit();
-        } catch (\Stripe\Exception\SignatureVerificationException $e) {
-            // Invalid signature
-            echo $e->getMessage();
-            http_response_code(400);
-            exit();
+
+        $event = $request->query;
+        // Parse the message body and check the signature
+        $signature = $request->headers->get('stripe-signature');
+
+        if ($endpoint_secret) {
+            try {
+                $event = \Stripe\Webhook::constructEvent(
+                    $request->getcontent(),
+                    $signature,
+                    $endpoint_secret
+                );
+            } catch (\Exception $e) {
+                return new JsonResponse([['error' => $e->getMessage(), 'status' => 403]]);
+            }
+        } else {
+            $request->query;
         }
 
+        $type = $event['type'];
+        $object = $event['data']['object'];
+        $manager = $this->getDoctrine()->getManager();
+        $today = date("Y-m-d", strtotime('today'));
+
         // Handle the event
-        switch ($event->type) {
+        switch ($type) {
             case 'charge.succeeded':
 
-                $charge_success = $event->data->object; // contains a StripePaymentIntent
+                $charge_success = $type->object; // contains a StripePaymentIntent
                 $session->set('charge_success', $charge_success);
                 break;
             case 'checkout.session.completed':
-                $checkout_complet = $event->data->object; // contains a StripePaymentIntent
+                $checkout_complet = $type->object; // contains a StripePaymentIntent
                 $session->set('checkout_complet', $checkout_complet);
                 break;
                 // ... handle other event types
             case 'customer.subscription.created':
-                $customer_sub_created = $event->data->object; // contains a StripePaymentIntent
+                $customer_sub_created = $type->object; // contains a StripePaymentIntent
                 $session->set('customer_sub_created', $customer_sub_created);
                 break;
                 // ... handle other event types
             case 'customer.subscription.updated':
-                $customer_sub_updated = $event->data->object; // contains a StripePaymentIntent
+                $customer_sub_updated = $type->object; // contains a StripePaymentIntent
                 $session->set('customer_sub_updated', $customer_sub_updated);
                 break;
                 // ... handle other event types
             case 'invoice.payment_succeeded':
-                $invoice_payment_succeeded = $event->data->object; // contains a StripePaymentIntent
+                $invoice_payment_succeeded = $type->object; // contains a StripePaymentIntent
                 $session->set('invoice_payment_succeeded', $invoice_payment_succeeded);
                 break;
                 // ... handle other event types
