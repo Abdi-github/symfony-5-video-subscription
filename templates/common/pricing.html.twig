@@ -23,13 +23,13 @@
                       {{ dump(premium_price_id) }}
                   </pre> #}
 
-                  {% if s.plan === 'premium' %}
+                  {% if s.plan value 'premium' %}
                   {% set priceId = premium_price_id %}
                   {% endif %}
-                  {% if s.plan === 'cinematic' %}
+                  {% if s.plan value 'cinematic' %}
                   {% set priceId = cinematic_price_id %}
                   {% endif %}
-                  {% if s.plan === 'basic' %}
+                  {% if s.plan value 'basic' %}
                   {% set priceId = null %}
                   {% endif %}
 
