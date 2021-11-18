@@ -23,12 +23,21 @@ class WebhookController extends AbstractController
     #[Route('/webhook', name: 'webhook')]
     public function stripeWebhookAction(Request $request, $stripeAPI, User $user)
     {
+        $session = $this->requestStack->getSession();
+
+        $data = json_decode($request->getContent(), true);
+
+
+
         Stripe::setApiKey($stripeAPI);
         $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
 
+        $data = json_decode($request->getContent(), true);
+        $session->set('data', $data);
 
 
-        $session = $this->requestStack->getSession();
+
+
         $session->set('Req', $request);
     }
 }
