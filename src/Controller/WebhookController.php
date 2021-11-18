@@ -23,6 +23,7 @@ class WebhookController extends AbstractController
     #[Route('/webhook', name: 'webhook')]
     public function stripeWebhookAction(Request $request, $stripeAPI, User $user)
     {
+        $session = $this->requestStack->getSession();
 
         $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
 
@@ -40,6 +41,7 @@ class WebhookController extends AbstractController
                 $sig_header,
                 $endpoint_secret
             );
+            echo $event->data;
         } catch (\UnexpectedValueException $e) {
             // Invalid payload
             echo $e->getMessage();
@@ -51,6 +53,42 @@ class WebhookController extends AbstractController
             http_response_code(400);
             exit();
         }
+
+        // Handle the event
+        switch ($event->type) {
+            case 'charge.succeeded':
+
+                $charge_success = $event->data->object; // contains a StripePaymentIntent
+                $session->set('charge_success', $charge_success);
+                break;
+            case 'checkout.session.completed':
+                $checkout_complet = $event->data->object; // contains a StripePaymentIntent
+                $session->set('checkout_complet', $checkout_complet);
+                break;
+                // ... handle other event types
+            case 'customer.subscription.created':
+                $customer_sub_created = $event->data->object; // contains a StripePaymentIntent
+                $session->set('customer_sub_created', $customer_sub_created);
+                break;
+                // ... handle other event types
+            case 'customer.subscription.updated':
+                $customer_sub_updated = $event->data->object; // contains a StripePaymentIntent
+                $session->set('customer_sub_updated', $customer_sub_updated);
+                break;
+                // ... handle other event types
+            case 'invoice.payment_succeeded':
+                $invoice_payment_succeeded = $event->data->object; // contains a StripePaymentIntent
+                $session->set('invoice_payment_succeeded', $invoice_payment_succeeded);
+                break;
+                // ... handle other event types
+            default:
+                // Unexpected event type
+
+                return new Response(Response::HTTP_BAD_REQUEST);
+                exit();
+        }
+
+        return new Response(Response::HTTP_OK);
 
         // $session = $this->requestStack->getSession();
 
