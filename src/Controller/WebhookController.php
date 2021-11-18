@@ -42,6 +42,7 @@ class WebhookController extends AbstractController
                     $signature,
                     $endpoint_secret
                 );
+                $session->set('socket', 'Yess');
             } catch (\Exception $e) {
                 return new JsonResponse([['error' => $e->getMessage(), 'status' => 403]]);
             }
