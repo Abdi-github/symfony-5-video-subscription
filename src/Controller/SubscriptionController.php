@@ -49,7 +49,7 @@ class SubscriptionController extends AbstractController
 
 
 
-
+        // \dd($request);
 
         $priceId = $request->request->get('priceId');
         if ($priceId) {
@@ -82,73 +82,10 @@ class SubscriptionController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-
-
-
-
-
-
-
-
-
-
-
-
             return $this->redirect($stripeSession->url, 303);
         }
 
-        // $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
-
-        // $payload = @file_get_contents('php://input');
-        // $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
-        // $event = null;
-
-        // try {
-        //     $event = \Stripe\Webhook::constructEvent(
-        //         $payload,
-        //         $sig_header,
-        //         $endpoint_secret
-        //     );
-        // } catch (\UnexpectedValueException $e) {
-        //     // Invalid payload
-        //     http_response_code(400);
-        //     exit();
-        // } catch (\Stripe\Exception\SignatureVerificationException $e) {
-        //     // Invalid signature
-        //     http_response_code(400);
-        //     exit();
-        // }
-        // // $id = $event->data->object->id;
-        // // $captured = $event->data->object->paid;
-        // // $amount = $event->data->object->amount_captured;
-        // // $currency = $event->data->object->currency;
-        // // $cus_email = $event->data->object->receipt_email;
-        // // $name = $event->data->object->billing_details->name;
-
-        // // Handle the event
-        // switch ($event->type) {
-
-        //     case 'invoice.payment_succeeded':
-
-
-
-        //         $em = $this->getDoctrine()->getManager();
-        //         $user = $this->getUser();
-        //         $user->setPaymentStatus(true);
-        //         $em->persist($user);
-        //         $em->flush();
-
-        //         break;
-
-
-
-
-        //         // ... handle other event types
-        //     default:
-        //         echo 'Received unknown event type ' . $event->type;
-        // }
-
-        // http_response_code(200);
+        return $this->redirectToRoute('pricing');
     }
 
 
