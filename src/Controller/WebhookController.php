@@ -23,21 +23,49 @@ class WebhookController extends AbstractController
     #[Route('/webhook', name: 'webhook')]
     public function stripeWebhookAction(Request $request, $stripeAPI, User $user)
     {
-        $session = $this->requestStack->getSession();
 
-        $data = json_decode($request->getContent(), true);
-
-
-
-        Stripe::setApiKey($stripeAPI);
         $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
 
-        $data = json_decode($request->getContent(), true);
-        $session->set('data', $data);
+        $payload = @file_get_contents('php://input');
+
+        $header = 'Stripe-Signature';
+        $signature = $request->headers->get($header);
+
+        $sig_header = $signature;
+        $event = null;
+
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $sig_header,
+                $endpoint_secret
+            );
+        } catch (\UnexpectedValueException $e) {
+            // Invalid payload
+            echo $e->getMessage();
+            http_response_code(400);
+            exit();
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Invalid signature
+            echo $e->getMessage();
+            http_response_code(400);
+            exit();
+        }
+
+        // $session = $this->requestStack->getSession();
+
+        // $data = json_decode($request->getContent(), true);
+
+
+
+        // $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
+
+        // $data = json_decode($request->getContent(), true);
+        // $session->set('data', $data);
 
 
 
 
-        $session->set('Req', $request);
+        // $session->set('Req', $request);
     }
 }
