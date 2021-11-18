@@ -24,7 +24,7 @@
                   </pre> #}
 
                   {% if s.plan == 'basic' %}
-                  {% set priceId = null %}
+                  {% set priceId = basic_price_id %}
                   {% endif %}
                   {% if s.plan == 'premium' %}
                   {% set priceId = premium_price_id %}
