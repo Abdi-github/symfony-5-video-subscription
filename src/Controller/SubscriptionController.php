@@ -28,7 +28,7 @@ class SubscriptionController extends AbstractController
 
     public function getPricingDetail(SubscriptionRepository $sr)
     {
-        $subscriptions = $sr->findAll();
+        $subscriptions = $sr->findBy([], ['id' => 'ASC']);
         // \dd($subscriptions);
         return $this->render('common/pricing.html.twig', [
             'subscriptions' => $subscriptions,
