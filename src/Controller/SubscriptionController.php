@@ -82,7 +82,8 @@ class SubscriptionController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            return $this->redirect($stripeSession->url, 303);
+            // return $this->redirect($stripeSession->url, 303);
+            return $this->redirectToRoute('webhook');
         }
 
         return $this->redirectToRoute('pricing');
