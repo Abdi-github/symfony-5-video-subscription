@@ -36,7 +36,7 @@
                             </li>
                             {% if is_granted('ROLE_ADMIN') %}
                             <li class="header__nav-item">
-                                <a href="{{path('admin_panel')}}" class="header__nav-link">Admin</a>
+                                <a href="{{path('admin')}}" class="header__nav-link">Admin</a>
                             </li>
                             {% endif %}
                             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and not is_granted('ROLE_ADMIN') %}

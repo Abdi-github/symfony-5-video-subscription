@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Subscription;
+use App\Entity\User;
 use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
@@ -12,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Stripe\Stripe;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use DateTime;
 
 class SubscriptionController extends AbstractController
 {
@@ -37,10 +40,11 @@ class SubscriptionController extends AbstractController
 
 
     #[Route('/subscribe/{user}/{plan}', name: 'checkout')]
-    public function subscribe(Request $request,  $stripeAPI, UserRepository $ur)
+    public function subscribe(Request $request,  $stripeAPI, SubscriptionRepository $sr)
     {
 
         // \dd($request->request->get('priceId'));
+        // \dd($request->attributes->get('plan'));
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         Stripe::setApiKey($stripeAPI);
@@ -52,9 +56,7 @@ class SubscriptionController extends AbstractController
         // \dd($request);
 
         $priceId = $request->request->get('priceId');
-        if ($priceId) {
-
-
+        if ($priceId != 'free_price') {
             $stripeSession = \Stripe\Checkout\Session::create([
                 'success_url' => $this->generateUrl('success_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'cancel_url' => $this->generateUrl('cancel_url', [], UrlGeneratorInterface::ABSOLUTE_URL),
@@ -62,6 +64,7 @@ class SubscriptionController extends AbstractController
                 'mode' => 'subscription',
                 'client_reference_id' => $this->getUser()->getId(),
                 'customer_email' => $this->getUser()->getEmail(),
+
                 'line_items' => [[
                     'price' => $priceId,
                     // For metered billing, do not pass quantity
@@ -69,20 +72,53 @@ class SubscriptionController extends AbstractController
                 ]],
             ]);
 
+            // \dd($this->getUser()->getStrSubscriptionId());
+
+            if ($this->getUser()->getStrSubscriptionId()) {
+                $stripe = new \Stripe\StripeClient(
+                    $stripeAPI
+                );
+                $stripe->subscriptions->update(
+                    $this->getUser()->getStrSubscriptionId(),
+                    ['metadata' => ['customer_id' => $this->getUser()->getStrCustomerId()]]
+                );
+            }
+
+
+
+
+
+
+
+
+
+
+
             $session->set('stripe-session-id', $stripeSession->id);
 
-            // unset($_SESSION['stripe-session-id']); // To delete a session var
 
-            // $session->remove('stripe-session-id');
-            // $session->remove('session-data');
+
+
+
+            return $this->redirect($stripeSession->url, 303);
+        } else {
+            // \dd($request);
+            $user = $this->getUser();
+            $basicPlan = $sr->findOneBy(['price' => 0]);
+            $freeTrialTime = \explode(" ", $basicPlan->getValidUntil());
+            $timeExpolode = $freeTrialTime[0];
+
+
+
+            $user->setSubscription($basicPlan);
+            $user->setSubscriptionValidUntil((new DateTime())->modify('+7 day'));
+            $user->setFreePlanUsed(true);
 
             $em = $this->getDoctrine()->getManager();
-            $user = $this->getUser();
-            $user->setStripeSessionId($stripeSession->id);
             $em->persist($user);
             $em->flush();
 
-            return $this->redirect($stripeSession->url, 303);
+            return $this->redirectToRoute('user_profile', ['user' => $this->getUser()->getId()]);
         }
 
         return $this->redirectToRoute('pricing');
@@ -90,46 +126,50 @@ class SubscriptionController extends AbstractController
 
 
 
+
+
+
     #[Route('/success-url', name: 'success_url')]
-    public function successUrl(UserRepository $ur, $stripeAPI): Response
+    public function successUrl(): Response
     {
-        $this->paymentStatus($stripeAPI, $ur);
         return $this->render('payment/success.html.twig', []);
     }
 
 
     #[Route('/cancel-url', name: 'cancel_url')]
-    public function cancelUrl(UserRepository $ur, $stripeAPI): Response
+    public function cancelUrl(): Response
     {
-        $this->paymentStatus($stripeAPI, $ur);
 
         return $this->render('payment/cancel.html.twig', []);
     }
 
-    private function paymentStatus($stripeAPI, UserRepository $ur)
+    #[Route('/cancel/{user}/{plan}', name: 'cancel_plan')]
+    public function cancelPlan(Request $request, User $user, $stripeAPI): Response
     {
-        Stripe::setApiKey($stripeAPI);
+        // \dd($user->getStrSubscriptionId());
+        // dd($user->getSubscription());
+        // $subscription = $user->getSubscription();
 
-        $session = $this->requestStack->getSession();
 
-        $sd =  \Stripe\Checkout\Session::retrieve($session->get('stripe-session-id'));
 
-        $session->set('session-data', $sd);
+        if ($user->getStrSubscriptionId()) {
+            $str_sub_id = $user->getStrSubscriptionId();
 
-        $user = $ur->findOneBy(['stripe_session_id' => $session->get('stripe-session-id')]);
-        if ($sd->payment_status === 'paid') {
-            # code...
-            $em = $this->getDoctrine()->getManager();
-            $user->setPaymentStatus(\true);
-            $em->persist($user);
-            $em->flush();
-
-            return $this->json(['paid' => true]);
+            $stripe = new \Stripe\StripeClient($stripeAPI);
+            $stripe->subscriptions->cancel(
+                $str_sub_id,
+                []
+            );
+            $user->setPaymentStatus(false);
+            $user->setStrSubscriptionId(\null);
         }
+        $user->setSubscription(\null);
+        $user->setSubscriptionValidUntil(new DateTime());
 
-        return $this->json(['paid' => false]);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
 
-
-        // return $this->render('payment/check.html.twig', ['sd' => $sd->payment_status]);
+        return $this->redirectToRoute('user_profile', ['user' => $user->getId()]);
     }
 }

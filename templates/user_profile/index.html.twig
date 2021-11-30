@@ -132,18 +132,19 @@
 
                 <div class="tab-pane fade" id="subscription" role="tabpanel" aria-labelledby="subscription">
                     <div class="row row--grid">
-                     
+
+                
                         {% if user.subscription %}
 
-                            {% if user.subscription.plan == 'Basic' %}
+                            {% if user.subscription.plan == 'basic' %}
                             {% include "common/subscriptions/free.html.twig" %}                   
                             {% endif %}
 
-                            {% if user.subscription.plan == 'Premium' %}
+                            {% if user.subscription.plan == 'premium' %}
                             {% include "common/subscriptions/premium.html.twig" %}                   
                             {% endif %}
 
-                            {% if user.subscription.plan == 'Cinematic' %}
+                            {% if user.subscription.plan == 'cinematic' %}
                             {% include "common/subscriptions/cinematic.html.twig" %}                   
                             {% endif %}
 
@@ -224,5 +225,8 @@
         </div>
     </div>
     <!-- end content -->
+
+{% endblock %}
+{% block pricing %}
 
 {% endblock %}

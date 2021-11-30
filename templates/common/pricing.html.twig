@@ -1,5 +1,4 @@
 
-
 <section id="pricing-plan" class="section section--border">
         <div class="container">
          
@@ -24,6 +23,10 @@
                   {% if s.plan == 'cinematic' %}
                   {% set priceId = cinematic_price_id %}
                   {% endif %}
+                  
+                  
+
+
 
                  
                   
@@ -37,7 +40,7 @@
                     
                         <div class="price">
                             <div class="price__item">
-                             <span>{{s.plan}} </span> &nbsp;
+                             <span style="color: #f9ab00">{{s.plan | upper}} </span> &nbsp;
                              <span>{{s.plan == 'basic' ? '  Free  ' : '  CHF ' ~ s.price }}</span>
                             </div>
                             <div class="price__item"><span><i class="icon ion-ios-checkmark"></i> {{s.validUntil}}</span></div>
@@ -45,20 +48,55 @@
                             <div class="price__item {{s.availability == 'limited' ? 'price__item--none' : ''}}"><span><i class="{{s.availability == 'limited' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.availability}} Availability</span></div>
                             <div class="price__item {{s.device == 'Any Device'  ? '' : 'price__item--none'}} "><span><i class="{{s.device == 'Any Device' ? 'icon ion-ios-checkmark' : 'icon ion-ios-close'}}"></i> {{s.device}}</span></div>
                             <div class="price__item {{s.support == 'limited support' ? 'price__item--none' : ''}} "><span><i class="{{s.support == 'limited support' ? 'icon ion-ios-close' : 'icon ion-ios-checkmark'}}"></i> {{s.support|capitalize}}</span></div>
-                        
-                           {% if app.user %}
-                            <input type="hidden" name="priceId" value="{{priceId}}" />
-                            <input type="hidden" name="token" value="{{ csrf_token('checkout') }}"/>
-                            <button  class="prices__btn" type="submit">Choose Plan</button>
-                           {% endif %}
+                      
+
+{% if app.user %}
+{% if app.user and app.user.getSubscription() != null and app.user.getSubscription().id == s.id  %}
+<a href="{{path('user_profile', {'user': app.user.id})}}" style="color: #f9ab00; border-color: #29b474"  class=" price__btn ">Active Plan</a>
+{% elseif app.user.getSubscription() == null or  app.user.getSubscription().id != s.id   %}
+
+ <input type="hidden" name="priceId" value="{{priceId}}" />
+    <input type="hidden" name="token" value="{{ csrf_token('checkout') }}"/>
                            
-                           {% if not app.user %}
-                           <a href="{{path('app_login')}}" class="price__btn">Choose Plan</a>
-                           {% endif %}
+    <button  class="prices__btn" type="submit">Choose Plan</button>
+{% endif %}
+{% endif %}
+
+
+       
+{% if not app.user  %}
+ <a href="{{path('app_login')}}" class="price__btn">Choose Plan</a>          
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+              
+              
+              
+              
+                      
+                        
+                                                    
+                           
+                              
+                               
+                           
+                          
+                           
+                         
                             </form> 
+
                         
                         </div>
                     </form>
+                
                 </div>
                 <!-- end price -->
                 

@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\SubscriptionRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +13,7 @@ use App\Repository\VideoRepository;
 use Psr\Log\LoggerInterface;
 use Stripe\Stripe;
 use Symfony\Component\HttpFoundation\RequestStack;
+use DateTime;
 
 class WebhookController extends AbstractController
 {
@@ -21,67 +25,99 @@ class WebhookController extends AbstractController
     }
 
     #[Route('/webhook', name: 'webhook')]
-    public function stripeWebhookAction(Request $request, $stripeAPI, User $user)
+    public function stripeWebhookAction($stripeAPI, UserRepository $ur, SubscriptionRepository $sr)
     {
+        Stripe::setApiKey($stripeAPI);
+        $endpoint_secret = 'whsec_o5GViEieAbivYcyXwLTyOyFOHAwc0zN2';
         $session = $this->requestStack->getSession();
 
-        $endpoint_secret = 'whsec_Cl1FIM6uvwBE5h9BEpMOBcQsyQl5siZX';
+        $em = $this->getDoctrine()->getManager();
+        $json_str = \file_get_contents('php://input');
+        $event = \json_decode($json_str);
+
+        $type = $event->type;
+        $object = $event->data->object;
 
 
-
-
-
-        $event = $request->query;
-        // Parse the message body and check the signature
-        $signature = $request->headers->get('stripe-signature');
-
-        if ($endpoint_secret) {
-            try {
-                $event = \Stripe\Webhook::constructEvent(
-                    $request->getcontent(),
-                    $signature,
-                    $endpoint_secret
-                );
-                $session->set('socket', 'Yess');
-            } catch (\Exception $e) {
-                return new JsonResponse([['error' => $e->getMessage(), 'status' => 403]]);
-            }
-        } else {
-            $request->query;
-        }
-
-        $type = $event['type'];
-        $object = $event['data']['object'];
-        $manager = $this->getDoctrine()->getManager();
-        $today = date("Y-m-d", strtotime('today'));
 
         // Handle the event
         switch ($type) {
+
+            case 'invoice.paid':
+
+                $user = $ur->findOneBy(['email' => $object->customer_email]);
+                $plan = $sr->findOneBy(['str_price_id' => $object->lines->data[0]->plan->id]);
+                $user->setSubscription($plan);
+                $user->setPaymentStatus(\true);
+                $user->setStrCustomerId($object->customer);
+                $user->setStrSubscriptionId($object->subscription);
+                $user->setSubscriptionValidUntil(DateTime::createFromFormat('U', $object->lines->data[0]->period->end));
+                $em->persist($user);
+                $em->flush();
+                break;
+                // ... handle other event types
+
+
+                // case 'invoice.paid':
+
+                //     \dump($event->data->object);
+                //     // $user = $ur->findOneBy(['email', $object->customer_email]);
+                //     // $user->setPaymentStatus(\true);
+                //     // $user->setStrCustomerId($object->customer);
+                //     // $em->persist($user);
+                //     // $em->flush();
+
+                //     break;
+                //     // ... handle other event types
+
+
+
+                // ... handle other event types
+            case 'customer.subscription.deleted':
+
+                // \dump($event->data->object);
+
+
+                break;
+                // ... handle other event types
+            case 'customer.updated':
+
+                \dump($event->data->object);
+                // $user = $ur->findOneBy(['email', $object->customer_email]);
+                // $user->setPaymentStatus(\true);
+                // $user->setStrCustomerId($object->customer);
+                // $em->persist($user);
+                // $em->flush();
+
+                break;
+                // ... handle other event types
+
             case 'charge.succeeded':
 
-                $charge_success = $type->object; // contains a StripePaymentIntent
-                $session->set('charge_success', $charge_success);
+                \dump($event->data->object);
+                // $user = $ur->findOneBy(['email', $object->customer_email]);
+                // $user->setPaymentStatus(1);
+                // $user->setStrCustomerId($object->customer);
+                // $em->persist($user);
+                // $em->flush();
+
                 break;
             case 'checkout.session.completed':
-                $checkout_complet = $type->object; // contains a StripePaymentIntent
-                $session->set('checkout_complet', $checkout_complet);
+
+                \dump($event->data->object);
+                // $user = $ur->findOneBy(['email', $object->customer_email]);
+                // $user->setPaymentStatus(\true);
+                // $user->setStrCustomerId($object->customer);
+                // $em->persist($user);
+                // $em->flush();
+
                 break;
                 // ... handle other event types
-            case 'customer.subscription.created':
-                $customer_sub_created = $type->object; // contains a StripePaymentIntent
-                $session->set('customer_sub_created', $customer_sub_created);
-                break;
-                // ... handle other event types
-            case 'customer.subscription.updated':
-                $customer_sub_updated = $type->object; // contains a StripePaymentIntent
-                $session->set('customer_sub_updated', $customer_sub_updated);
-                break;
-                // ... handle other event types
-            case 'invoice.payment_succeeded':
-                $invoice_payment_succeeded = $type->object; // contains a StripePaymentIntent
-                $session->set('invoice_payment_succeeded', $invoice_payment_succeeded);
-                break;
-                // ... handle other event types
+
+
+
+
+
             default:
                 // Unexpected event type
 

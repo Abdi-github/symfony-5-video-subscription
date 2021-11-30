@@ -7,8 +7,12 @@
                         <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> Limited Availability</span></div>
                         <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> Desktop Only</span></div>
                         <div class="price__item price__item--none"><span><i class="icon ion-ios-close"></i> Limited Support</span></div>
-                          <a href="#" class="price__btn">Change Plan</a>
-                        <a href="{{path('cancel_plan', {'user': user.id, 'plan': user.subscription.id})}}" class="price__btn">Cancel Plan</a>
+                         {% if app.user.getSubscription() %}
+                        <div class="price__item "><span><i class="icon ion-ios-clock"></i> Valid Until {{app.user.subscriptionValidUntil |date	}}</span></div>
+                        {% endif %}
+                        
+                        <a href="{{path('pricing')}}"  class="price__btn">Change Plan</a>
+                        <a href="{{path('cancel_plan', {'user': app.user.id, 'plan': app.user.getsubscription().id})}}" style="color: #f9ab00; border-color: #f9ab00" class="price__btn ">Cancel Plan</a>
                     </div>
                 </div>
                 <!-- end price -->

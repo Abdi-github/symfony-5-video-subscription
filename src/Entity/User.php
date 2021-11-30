@@ -103,10 +103,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $subscription_valid_until;
 
+
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=45, nullable=true)
      */
-    private $stripe_session_id;
+    private $str_customer_id;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $str_subscription_id;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $str_price_id;
 
     public function __construct()
     {
@@ -358,14 +370,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getStripeSessionId(): ?string
+
+
+    public function getStrCustomerId(): ?string
     {
-        return $this->stripe_session_id;
+        return $this->str_customer_id;
     }
 
-    public function setStripeSessionId(?string $stripe_session_id): self
+    public function setStrCustomerId(?string $str_customer_id): self
     {
-        $this->stripe_session_id = $stripe_session_id;
+        $this->str_customer_id = $str_customer_id;
+
+        return $this;
+    }
+
+    public function getStrSubscriptionId(): ?string
+    {
+        return $this->str_subscription_id;
+    }
+
+    public function setStrSubscriptionId(?string $str_subscription_id): self
+    {
+        $this->str_subscription_id = $str_subscription_id;
+
+        return $this;
+    }
+
+    public function getStrPriceId(): ?string
+    {
+        return $this->str_price_id;
+    }
+
+    public function setStrPriceId(?string $str_price_id): self
+    {
+        $this->str_price_id = $str_price_id;
 
         return $this;
     }

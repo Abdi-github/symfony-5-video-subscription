@@ -59,6 +59,11 @@ class Subscription
      */
     private $support;
 
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $str_price_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -170,5 +175,22 @@ class Subscription
         $this->support = $support;
 
         return $this;
+    }
+
+    public function getStrPriceId(): ?string
+    {
+        return $this->str_price_id;
+    }
+
+    public function setStrPriceId(?string $str_price_id): self
+    {
+        $this->str_price_id = $str_price_id;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->plan;
     }
 }

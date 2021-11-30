@@ -27,7 +27,11 @@ class UserProfileController extends AbstractController
     public function index(User $user): Response
     {
 
-        // \dd($user->getSubscription());
+
+        $this->denyAccessUnlessGranted('PROFILE_VIEW', $user);
+
+
+
         return $this->render('user_profile/index.html.twig', [
             'user' => $user
         ]);
@@ -77,25 +81,6 @@ class UserProfileController extends AbstractController
             }
         }
 
-
-        return $this->redirectToRoute('user_profile', ['user' => $user->getId()]);
-    }
-
-
-
-    #[Route('/user/plan/cancel/{user}/{plan}', name: 'cancel_plan')]
-    public function cancelPlan(User $user)
-    {
-        // \dd($user);
-        $subscription = $user->getSubscription();
-        $subscription->setValidUntil(new DateTime());
-        $subscription->setPaymentStatus(null);
-        $subscription->setPlan('canceled');
-
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($subscription);
-        $em->flush();
 
         return $this->redirectToRoute('user_profile', ['user' => $user->getId()]);
     }

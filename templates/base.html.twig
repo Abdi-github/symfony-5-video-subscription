@@ -60,7 +60,9 @@
 
 
     <!-- pricing -->
+  {% block pricing %}
   {{render(controller('App\\Controller\\SubscriptionController::getPricingDetail'))}} 
+  {% endblock %}
   {# {% include "common/pricing.html.twig" %} #}
     <!-- end pricing -->
 

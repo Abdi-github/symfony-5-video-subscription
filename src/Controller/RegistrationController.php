@@ -30,6 +30,58 @@ class RegistrationController extends AbstractController
         return $this->render('common/confirm_redirect.html.twig');
     }
 
+    // #[Route('/register', name: 'app_register')]
+    // public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    // {
+    //     dd($request);
+    //     $user = new User();
+    //     $form = $this->createForm(RegistrationFormType::class, $user);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         // encode the plain password
+    //         $user->setPassword(
+    //             $userPasswordHasherInterface->hashPassword(
+    //                 $user,
+    //                 $form->get('password')->getData()
+    //             )
+    //         );
+
+    //         $user->setFirstName($form->get('first_name')->getData());
+    //         $user->setLastName($form->get('last_name')->getData());
+
+    //         if ($request->attributes->get('_route') == 'app_register_admin') {
+    //             $user->setRoles(['ROLE_ADMIN']);
+    //         }
+
+    //         $user->setRoles(['ROLE_USER']);
+    //         $user->setFreePlanUsed(false);
+    //         $user->setPaymentStatus(false);
+
+
+    //         $entityManager = $this->getDoctrine()->getManager();
+    //         $entityManager->persist($user);
+    //         $entityManager->flush();
+
+    //         // generate a signed url and email it to the user
+    //         $this->emailVerifier->sendEmailConfirmation(
+    //             'app_verify_email',
+    //             $user,
+    //             (new TemplatedEmail())
+    //                 ->from(new Address('swift-app@gmx.ch', 'Swift'))
+    //                 ->to($user->getEmail())
+    //                 ->subject('Please Confirm your Email')
+    //                 ->htmlTemplate('registration/confirmation_email.html.twig')
+    //         );
+    //         // do anything else you need here, like send an email
+
+    //         return $this->redirectToRoute('app_confirm');
+    //     }
+
+    //     return $this->render('registration/register.html.twig', [
+    //         'registrationForm' => $form->createView(),
+    //     ]);
+    // }
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
@@ -37,45 +89,126 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasherInterface->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
+            return $this->reg(
+                $request,
+                $userPasswordHasherInterface
             );
-
-            $user->setFirstName($form->get('first_name')->getData());
-            $user->setLastName($form->get('last_name')->getData());
-            $user->setRoles(['ROLE_USER']);
-            $user->setFreePlanUsed(false);
-            $user->setPaymentStatus(false);
-
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('swift-app@gmx.ch', 'Swift'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('app_confirm');
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    #[Route('/admin/register', name: 'app_register_admin')]
+    public function registerAdmin(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->reg(
+                $request,
+                $userPasswordHasherInterface
+            );
+        }
+
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
+
+
+
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     // encode the plain password
+        //     $user->setPassword(
+        //         $userPasswordHasherInterface->hashPassword(
+        //             $user,
+        //             $form->get('password')->getData()
+        //         )
+        //     );
+
+        //     $user->setFirstName($form->get('first_name')->getData());
+        //     $user->setLastName($form->get('last_name')->getData());
+        //     $user->setRoles(['ROLE_ADMIN']);
+        //     $user->setFreePlanUsed(false);
+        //     $user->setPaymentStatus(false);
+
+
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->persist($user);
+        //     $entityManager->flush();
+
+        //     // generate a signed url and email it to the user
+        //     $this->emailVerifier->sendEmailConfirmation(
+        //         'app_verify_email',
+        //         $user,
+        //         (new TemplatedEmail())
+        //             ->from(new Address('swift-app@gmx.ch', 'Swift'))
+        //             ->to($user->getEmail())
+        //             ->subject('Please Confirm your Email')
+        //             ->htmlTemplate('registration/confirmation_email.html.twig')
+        //     );
+        //     // do anything else you need here, like send an email
+
+        //     return $this->redirectToRoute('app_confirm');
+        // }
+
+
+    }
+
+    private function reg(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface)
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+        // encode the plain password
+        $user->setPassword(
+            $userPasswordHasherInterface->hashPassword(
+                $user,
+                $form->get('password')->getData()
+            )
+        );
+
+        $user->setFirstName($form->get('first_name')->getData());
+        $user->setLastName($form->get('last_name')->getData());
+
+        if ($request->attributes->get('_route') == 'app_register_admin') {
+            $user->setRoles(['ROLE_ADMIN']);
+        } else if ($request->attributes->get('_route') == 'app_register') {
+
+            $user->setRoles(['ROLE_USER']);
+        }
+
+        $user->setFreePlanUsed(false);
+        $user->setPaymentStatus(false);
+
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation(
+            'app_verify_email',
+            $user,
+            (new TemplatedEmail())
+                ->from(new Address('swift-app@gmx.ch', 'Swift'))
+                ->to($user->getEmail())
+                ->subject('Please Confirm your Email')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
+        // do anything else you need here, like send an email
+
+        return $this->redirectToRoute('app_confirm');
+    }
+
+
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, UserRepository $userRepository): Response

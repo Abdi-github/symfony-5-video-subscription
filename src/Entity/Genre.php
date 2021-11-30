@@ -29,6 +29,7 @@ class Genre
 
     /**
      * @ORM\ManyToMany(targetEntity=Video::class, inversedBy="genres")
+     * @ORM\JoinTable(name="genre_video")
      */
     private $videos;
 
@@ -76,5 +77,10 @@ class Genre
         $this->videos->removeElement($video);
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
